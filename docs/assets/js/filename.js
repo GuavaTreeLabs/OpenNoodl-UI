@@ -5,42 +5,41 @@ $(document).ready(function () {
     const folderPath = "docs/assets/img/interface/"; // Folder containing SVGs
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
 
-    // Recursive function to fetch files, including subfolders
-    function fetchFiles(url) {
-        return $.getJSON(url).then((data) => {
-            const filePromises = data.map((item) => {
+   function fetchFiles(url) {
+        return $.ajax({
+            url: url,
+            headers: headers
+        }).then((data) => {
+            const promises = data.map((item) => {
                 if (item.type === "file" && item.name.endsWith(".svg")) {
-                    // Fetch SVG content for files
-                    return fetchSVGContent(item.url).then((svgCode) => ({
+                    // Fetch raw SVG content for SVG files
+                    return fetchSVGContent(item.download_url).then((svgCode) => ({
                         name: item.name,
                         download_url: item.download_url,
-                        svgCode: svgCode,
+                        svgCode: svgCode
                     }));
                 } else if (item.type === "dir") {
                     // Recursively fetch files in subfolders
                     return fetchFiles(item.url);
                 }
             });
-            return Promise.all(filePromises).then((results) => results.flat());
+            return Promise.all(promises).then((results) => results.flat());
         });
     }
 
-    // Fetch raw SVG content from GitHub API
-    function fetchSVGContent(apiUrl) {
-        return $.getJSON(apiUrl).then((data) => {
-            // Decode base64 content to get SVG code
-            const base64Content = data.content;
-            const svgCode = atob(base64Content.replace(/\n/g, ""));
-            return svgCode;
-        });
+    // Fetch raw SVG code from download URL
+    function fetchSVGContent(downloadUrl) {
+        return fetch(downloadUrl)
+            .then((response) => response.text())
+            .catch(() => "Error fetching SVG content");
     }
 
-    // Populate the table with file details
+    // Populate the table with file data
     function populateTable(files) {
         files.forEach((file) => {
             const row = `
                 <tr>
-                    <td><img src="${file.download_url}" width="16" height="16" /></td>
+                    <td><img src="${file.download_url}" width="32" height="32" /></td>
                     <td>${file.name}</td>
                     <td><pre style="white-space: pre-wrap; max-width: 400px;">${escapeHTML(file.svgCode)}</pre></td>
                 </tr>
@@ -49,7 +48,7 @@ $(document).ready(function () {
         });
     }
 
-    // Escape HTML to safely display SVG code
+    // Escape HTML characters to display SVG code safely
     function escapeHTML(html) {
         return html.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
