@@ -26,12 +26,15 @@ $(document).ready(function () {
     }
 
     // Fetch the raw SVG code from the file's download URL
-    function fetchSVGCode(url) {
-        if (!url.endsWith(".svg")) {
-            return Promise.resolve(""); // Only fetch SVG files
-        }
-        return fetch(url).then((response) => response.text());
+function fetchSVGCode(url) {
+    if (!url.endsWith(".svg")) {
+        return Promise.resolve(""); // Only fetch SVG files
     }
+    const proxyUrl = "https://corsproxy.io/?"; // Use a CORS proxy
+    return fetch(proxyUrl + encodeURIComponent(url))
+        .then((response) => response.text())
+        .catch(() => "Error fetching SVG");
+}
 
     // Populate the table with file details
     function populateTable(files) {
