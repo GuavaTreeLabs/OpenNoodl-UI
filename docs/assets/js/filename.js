@@ -1,7 +1,7 @@
 $(document).ready(function () {
     const owner = "GuavaTreeLabs"; // GitHub username
     const repo = "OpenNoodl-UI"; // Repository name
-    const folderPath = "docs/assets/img/interface"; // Base folder path in the repository
+    const folderPath = "packages\noodl-core-ui\src\assets\icons"; // Base folder path in the repository
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
 
     let allFiles = []; // Stores all files for filtering and sorting
