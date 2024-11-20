@@ -17,10 +17,11 @@ $(document).ready(function () {
                         svgCode: svgCode,
                     }));
                 } else if (item.type === "dir") {
+                    // Recursively fetch files in subdirectories
                     return fetchFiles(item.url);
                 }
             });
-            return Promise.all(promises).then((results) => results.flat());
+            return Promise.all(promises).then((results) => results.flat()); // Flatten the array of results
         });
     }
 
