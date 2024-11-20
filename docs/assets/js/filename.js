@@ -13,11 +13,10 @@ $(document).ready(function () {
             const promises = data.map((item) => {
                 if (item.type === "file" && item.name.endsWith(".svg")) {
                     // Fetch raw SVG content for SVG files
-                    return fetchSVGContent(item.download_url).then((svgCode) => ({
-                        name: item.name,
-                        download_url: item.download_url,
-                        svgCode: svgCode
-                    }));
+                   const proxyUrl = "https://corsproxy.io/?"; // Use a public CORS proxy
+                    return fetch(proxyUrl + encodeURIComponent(downloadUrl))
+                    .then((response) => response.text());
+
                 } else if (item.type === "dir") {
                     // Recursively fetch files in subfolders
                     return fetchFiles(item.url);
