@@ -59,10 +59,11 @@ $(document).ready(function () {
                     <td>${file.path}</td>
                     <td>
                         <pre id="svg-code-${index}" style="white-space: pre-wrap; max-width: 400px;">${escapeHTML(file.svgCode)}</pre>
-                        <button class="btn btn-sm btn-primary copy-btn" data-clipboard-target="#svg-code-${index}">Copy</button>
+                        <button class="btn btn-dark link-light float-end copy-btn btn-check" data-clipboard-target="#svg-code-${index}">Copy</button>
                     </td>
                 </tr>
             `;
+
             $("#file-table-body").append(row);
         });
 
