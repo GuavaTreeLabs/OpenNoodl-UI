@@ -5,13 +5,13 @@ $(document).ready(function () {
     const folderPath = "docs/assets/img/interface/"; // Folder containing SVGs
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
 
-    // Recursive function to fetch files and subfolders
+    // Recursive function to fetch files, including subfolders
     function fetchFiles(url) {
         return $.getJSON(url).then((data) => {
             const filePromises = data.map((item) => {
-                if (item.type === "file") {
-                    // Fetch raw SVG code for SVG files
-                    return fetchSVGCode(item.download_url).then((svgCode) => ({
+                if (item.type === "file" && item.name.endsWith(".svg")) {
+                    // Fetch SVG content for files
+                    return fetchSVGContent(item.url).then((svgCode) => ({
                         name: item.name,
                         download_url: item.download_url,
                         svgCode: svgCode,
@@ -25,16 +25,15 @@ $(document).ready(function () {
         });
     }
 
-    // Fetch the raw SVG code from the file's download URL
-function fetchSVGCode(url) {
-    if (!url.endsWith(".svg")) {
-        return Promise.resolve(""); // Only fetch SVG files
+    // Fetch raw SVG content from GitHub API
+    function fetchSVGContent(apiUrl) {
+        return $.getJSON(apiUrl).then((data) => {
+            // Decode base64 content to get SVG code
+            const base64Content = data.content;
+            const svgCode = atob(base64Content.replace(/\n/g, ""));
+            return svgCode;
+        });
     }
-    const proxyUrl = "https://corsproxy.io/?"; // Use a CORS proxy
-    return fetch(proxyUrl + encodeURIComponent(url))
-        .then((response) => response.text())
-        .catch(() => "Error fetching SVG");
-}
 
     // Populate the table with file details
     function populateTable(files) {
@@ -45,7 +44,7 @@ function fetchSVGCode(url) {
                     <td>${file.name}</td>
                     <td><pre style="white-space: pre-wrap; max-width: 400px;">${escapeHTML(file.svgCode)}</pre></td>
                 </tr>
-            ;
+            `;
             $("#file-table-body").append(row);
         });
     }
