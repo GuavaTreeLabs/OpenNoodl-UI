@@ -2,21 +2,23 @@ $(document).ready(function () {
     // GitHub API details
     const owner = "GuavaTreeLabs"; // GitHub username
     const repo = "OpenNoodl-UI"; // Repository name
-    const folderPath = "docs/assets/img/interface/"; // Folder containing SVGs
+    const folderPath = "docs/assets/img/interface"; // Folder path in the repository
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
 
-   function fetchFiles(url) {
+    // Fetch files from GitHub API
+    function fetchFiles(url) {
         return $.ajax({
             url: url,
-            headers: headers
+            method: "GET", // Ensure GET method
         }).then((data) => {
             const promises = data.map((item) => {
                 if (item.type === "file" && item.name.endsWith(".svg")) {
                     // Fetch raw SVG content for SVG files
-                   const proxyUrl = "https://corsproxy.io/?"; // Use a public CORS proxy
-                    return fetch(proxyUrl + encodeURIComponent(downloadUrl))
-                    .then((response) => response.text());
-
+                    return fetchSVGContent(item.download_url).then((svgCode) => ({
+                        name: item.name,
+                        download_url: item.download_url,
+                        svgCode: svgCode,
+                    }));
                 } else if (item.type === "dir") {
                     // Recursively fetch files in subfolders
                     return fetchFiles(item.url);
@@ -26,9 +28,10 @@ $(document).ready(function () {
         });
     }
 
-    // Fetch raw SVG code from download URL
+    // Fetch raw SVG code from download URL using a CORS proxy
     function fetchSVGContent(downloadUrl) {
-        return fetch(downloadUrl)
+        const proxyUrl = "https://corsproxy.io/?";
+        return fetch(proxyUrl + encodeURIComponent(downloadUrl))
             .then((response) => response.text())
             .catch(() => "Error fetching SVG content");
     }
