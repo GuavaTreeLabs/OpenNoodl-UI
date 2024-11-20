@@ -45,7 +45,7 @@ function fetchSVGCode(url) {
                     <td>${file.name}</td>
                     <td><pre style="white-space: pre-wrap; max-width: 400px;">${escapeHTML(file.svgCode)}</pre></td>
                 </tr>
-            `;
+            ;
             $("#file-table-body").append(row);
         });
     }
