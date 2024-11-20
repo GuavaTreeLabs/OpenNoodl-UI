@@ -1,8 +1,8 @@
 $(document).ready(function () {
     // GitHub API details
-    const owner = "YOUR_GITHUB_USERNAME"; // e.g., GuavaTreeLabs
-    const repo = "YOUR_REPO_NAME"; // e.g., OpenNoodl-UI
-    const folderPath = "YOUR_FOLDER_PATH"; // e.g., interface
+    const owner = "GuavaTreeLabs"; // GitHub username
+    const repo = "OpenNoodl-UI"; // Repository name
+    const folderPath = "docs/assets/img/interface/"; // Folder containing SVGs
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
 
     // Recursive function to fetch files and subfolders
