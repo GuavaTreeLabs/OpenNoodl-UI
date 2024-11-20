@@ -1,43 +1,62 @@
 $(document).ready(function () {
     const owner = "GuavaTreeLabs"; // GitHub username
     const repo = "OpenNoodl-UI"; // Repository name
-    const folderPath = "assets/icons/"; // Folder path in the repository
+    const folderPath = "docs/assets/img/interface"; // Folder path in the repository
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
 
     function fetchFiles(url) {
+        console.log(`Fetching files from: ${url}`);
         return $.ajax({
             url: url,
             method: "GET",
-        }).then((data) => {
-            const promises = data.map((item) => {
-                if (item.type === "file" && item.name.endsWith(".svg")) {
-                    return fetchSVGContent(item.download_url).then((svgCode) => ({
-                        name: item.name,
-                        download_url: item.download_url,
-                        svgCode: svgCode,
-                    }));
-                } else if (item.type === "dir") {
-                    // Recursively fetch files in subdirectories
-                    return fetchFiles(item.url);
-                }
+        })
+            .then((data) => {
+                const promises = data.map((item) => {
+                    if (item.type === "file" && item.name.endsWith(".svg")) {
+                        return fetchSVGContent(item.download_url, item.path).then((svgCode) => ({
+                            name: item.name,
+                            path: item.path,
+                            download_url: item.download_url,
+                            svgCode: svgCode,
+                        }));
+                    } else if (item.type === "dir") {
+                        console.log(`Recursively fetching from directory: ${item.path}`);
+                        return fetchFiles(item.url);
+                    }
+                });
+                return Promise.all(promises).then((results) => results.flat());
+            })
+            .catch((err) => {
+                console.error(`Error fetching files from ${url}:`, err);
+                return [];
             });
-            return Promise.all(promises).then((results) => results.flat()); // Flatten the array of results
-        });
     }
 
-    function fetchSVGContent(downloadUrl) {
+    function fetchSVGContent(downloadUrl, filePath) {
         const proxyUrl = "https://corsproxy.io/?";
+        console.log(`Fetching SVG content from: ${downloadUrl}`);
         return fetch(proxyUrl + encodeURIComponent(downloadUrl))
-            .then((response) => response.text())
-            .catch(() => "Error fetching SVG content");
+            .then((response) => {
+                if (!response.ok) {
+                    console.error(`Failed to fetch SVG: ${filePath}`);
+                    return `Error fetching SVG content for ${filePath}`;
+                }
+                return response.text();
+            })
+            .catch((err) => {
+                console.error(`Error fetching SVG content from ${filePath}:`, err);
+                return `Error fetching SVG content for ${filePath}`;
+            });
     }
 
     function populateTable(files) {
+        console.log("Populating table with files:", files);
         files.forEach((file, index) => {
             const row = `
                 <tr>
                     <td><img src="${file.download_url}" width="32" height="32" /></td>
                     <td>${file.name}</td>
+                    <td>${file.path}</td>
                     <td>
                         <pre id="svg-code-${index}" style="white-space: pre-wrap; max-width: 400px;">${escapeHTML(file.svgCode)}</pre>
                         <button class="btn btn-sm btn-primary copy-btn" data-clipboard-target="#svg-code-${index}">Copy</button>
@@ -47,7 +66,6 @@ $(document).ready(function () {
             $("#file-table-body").append(row);
         });
 
-        // Initialize clipboard functionality after the rows are added
         initializeClipboard();
     }
 
@@ -60,12 +78,14 @@ $(document).ready(function () {
             const targetSelector = $(this).data("clipboard-target");
             const svgCode = $(targetSelector).text();
 
-            // Copy the SVG code to the clipboard
-            navigator.clipboard.writeText(svgCode).then(() => {
-                alert("SVG code copied to clipboard!");
-            }).catch((err) => {
-                console.error("Failed to copy text: ", err);
-            });
+            navigator.clipboard
+                .writeText(svgCode)
+                .then(() => {
+                    alert("SVG code copied to clipboard!");
+                })
+                .catch((err) => {
+                    console.error("Failed to copy text:", err);
+                });
         });
     }
 
