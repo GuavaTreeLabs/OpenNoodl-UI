@@ -1,7 +1,7 @@
 $(document).ready(function () {
     const owner = "GuavaTreeLabs"; // GitHub username
     const repo = "OpenNoodl-UI"; // Repository name
-    const folderPath = "docs/assets/img/interface"; // Folder path in the repository
+    const folderPath = "assets/icons/"; // Folder path in the repository
     const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${folderPath}`;
 
     function fetchFiles(url) {
