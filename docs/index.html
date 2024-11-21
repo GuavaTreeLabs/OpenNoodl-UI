@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>resource_list</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body style="background: var(--bs-body-color);">
@@ -25,18 +27,46 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-9 col-lg-9 col-xl-9 col-xxl-12" style="transform: perspective(0px);">
-                <div class="table-responsive text-break text-light d-xxl-flex mx-auto justify-content-xxl-center" style="margin-left: 20px;margin-top: 20px;">
-                    <table class="table table-striped table-dark table-bordered">
-                        <thead>
-                            <tr>
-                                <th style="width: 100px;">Icon</th>
-                                <th class="filename-column" style="sortable">Filename</th>
-                            </tr>
-                        </thead>
-                        <tbody id="file-table-body-1"></tbody>
-                    </table>
+            <div class="col-md-9 col-lg-9 col-xl-12 col-xxl-12" style="transform: perspective(0px);">
+                <section>
+                    <div class="container">
+                        <div class="row" data-bss-baguettebox="">
+                            <div class="col"><a class="d-xl-flex justify-content-xl-center align-items-xl-center" href="#" data-bs-toggle="modal" data-bs-target="#a001"><img class="d-block mx-auto" src="assets/img/align_item_center.svg" loading="lazy"></a></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="a001" data-bs-theme="dark">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-light">Resource Details</h4><button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="modal"></button>
                 </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td><img class="d-block float-start d-xl-flex mx-auto" src="assets/img/align_item_center.svg" loading="lazy" style="width: 100px;"></td>
+                                    <td>
+                                        <ul class="list-group">
+                                            <li class="list-group-item"><i class="far fa-file" style="margin-right: 10px;"></i><span id="svgDetails">align_item_center.svg</span></li>
+                                            <li class="list-group-item"><span><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-arrows-fullscreen" style="margin-right: 10px;">
+                                                        <path fill-rule="evenodd" d="M5.828 10.172a.5.5 0 0 0-.707 0l-4.096 4.096V11.5a.5.5 0 0 0-1 0v3.975a.5.5 0 0 0 .5.5H4.5a.5.5 0 0 0 0-1H1.732l4.096-4.096a.5.5 0 0 0 0-.707zm4.344 0a.5.5 0 0 1 .707 0l4.096 4.096V11.5a.5.5 0 1 1 1 0v3.975a.5.5 0 0 1-.5.5H11.5a.5.5 0 0 1 0-1h2.768l-4.096-4.096a.5.5 0 0 1 0-.707zm0-4.344a.5.5 0 0 0 .707 0l4.096-4.096V4.5a.5.5 0 1 0 1 0V.525a.5.5 0 0 0-.5-.5H11.5a.5.5 0 0 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 0 .707m-4.344 0a.5.5 0 0 1-.707 0L1.025 1.732V4.5a.5.5 0 0 1-1 0V.525a.5.5 0 0 1 .5-.5H4.5a.5.5 0 0 1 0 1H1.732l4.096 4.096a.5.5 0 0 1 0 .707"></path>
+                                                    </svg>Default Size:</span></li>
+                                            <li class="list-group-item d-xl-flex justify-content-xl-end"><button class="btn btn-primary btn-sm d-xl-flex align-items-xl-center" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" viewBox="0 0 16 16" class="bi bi-cloud-download-fill" style="margin-right: 5px;">
+                                                        <path fill-rule="evenodd" d="M8 0a5.53 5.53 0 0 0-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V5.5a.5.5 0 0 1 1 0V11h4.188C14.502 11 16 9.57 16 7.773c0-1.636-1.242-2.969-2.834-3.194C12.923 1.999 10.69 0 8 0m-.354 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V11h-1v3.293l-2.146-2.147a.5.5 0 0 0-.708.708z"></path>
+                                                    </svg>Download File</button></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer"><button class="btn btn-light" type="button" data-bs-dismiss="modal">Close</button></div>
             </div>
         </div>
     </div>
